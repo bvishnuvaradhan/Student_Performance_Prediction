@@ -28,6 +28,12 @@ python app.py
 ```
 4. Open http://127.0.0.1:5000 and sign up or login as admin.
 
+## Deploying to Render (easy)
+1. Ensure `gunicorn` is in `requirements.txt` (already included).
+2. This repo contains a `Procfile` with the start command for Gunicorn.
+3. On https://render.com create a new **Web Service**, connect your GitHub repo and set the build and start commands as default. Add the required environment variables from your `.env` to Render's dashboard.
+4. Deploy — Render will provide a public URL.
+
 ## Environment variables
 Use `.env` with:
 ```
