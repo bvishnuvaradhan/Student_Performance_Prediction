@@ -7,7 +7,7 @@
             <div id="chart-data" 
                  data-labels='{{ labels|tojson }}' 
                  data-scores='{{ scores|tojson }}' 
-                 class="chart-container mb-4">
+                 class="chart-container mb-4" style="height:320px;">
                 <canvas id="historyChart"></canvas>
             </div>
             <div class="table-responsive">
@@ -64,6 +64,37 @@
             if (s < scores[i-1]) return '#ff6b5a';
             return '#00d2ff';
         });
+        // Plugin to draw colored filled area per segment (green for increase, red for decrease)
+        const areaSegmentPlugin = {
+            id: 'areaSegmentPlugin',
+            afterDatasetsDraw(chart) {
+                const {ctx, chartArea: {top, bottom}} = chart;
+                const meta = chart.getDatasetMeta(0);
+                if (!meta || !meta.data || meta.data.length < 2) return;
+                ctx.save();
+                for (let i = 1; i < meta.data.length; i++) {
+                    const p0 = meta.data[i-1];
+                    const p1 = meta.data[i];
+                    const x0 = p0.x, y0 = p0.y;
+                    const x1 = p1.x, y1 = p1.y;
+                    let fillColor = 'rgba(58,110,165,0.06)';
+                    if (scores[i] > scores[i-1]) fillColor = 'rgba(39,210,122,0.18)';
+                    else if (scores[i] < scores[i-1]) fillColor = 'rgba(255,107,90,0.18)';
+
+                    ctx.beginPath();
+                    ctx.moveTo(x0, y0);
+                    ctx.lineTo(x1, y1);
+                    ctx.lineTo(x1, bottom);
+                    ctx.lineTo(x0, bottom);
+                    ctx.closePath();
+                    ctx.fillStyle = fillColor;
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        };
+
+        Chart.register(areaSegmentPlugin);
 
         new Chart(document.getElementById('historyChart'), {
             type: 'line',
@@ -73,8 +104,8 @@
                     label: 'All Users Score Trend',
                     data: scores,
                     borderColor: '#3a6ea5',
-                    backgroundColor: 'rgba(58,110,165,0.06)',
-                    fill: true,
+                    backgroundColor: 'rgba(0,0,0,0)',
+                    fill: false,
                     tension: 0.35,
                     borderWidth: 2,
                     pointRadius: 4,
