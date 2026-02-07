@@ -31,6 +31,11 @@ def create_admin_user():
 
 create_admin_user()
 
+
+@app.route('/health')
+def health():
+    return 'ok', 200
+
 @app.route('/')
 def index():
     # Require login to access prediction form
@@ -98,17 +103,17 @@ def delete_record(id):
 
 @app.route('/history')
 def history():
-    # show global history (all users) — admin only
+    # show history: users see only their history; admin sees everyone
     if 'username' not in session:
         return redirect(url_for('login', next=request.path))
 
-    if not session.get('is_admin', False):
-        flash('Access denied: admin only', 'danger')
-        return redirect(url_for('dashboard'))
+    username = session['username']
+    if session.get('is_admin', False):
+        history = list(mongo.db.predictions.find().sort('_id', -1))
+    else:
+        history = list(mongo.db.predictions.find({"user": username}).sort('_id', -1))
 
-    history = list(mongo.db.predictions.find().sort('_id', -1))
-
-    # aggregate labels and scores for the global chart
+    # aggregate labels and scores for the chart
     labels = [f"Entry {i+1}" for i in range(len(history))][::-1]
     scores = [record['predicted_score'] for record in history][::-1]
 
@@ -201,6 +206,10 @@ def delete_user():
     session.pop('is_admin', None)
     flash('Your account and all your predictions have been deleted', 'info')
     return redirect(url_for('signup'))
+
+@app.route('/health')
+def health():
+    return 'ok', 200
 
 if __name__ == '__main__':
     app.run(debug=True)

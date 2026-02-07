@@ -13,40 +13,7 @@
             </div>
             
             
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Daily Study Hrs</th>
-                            <th>Attendance %</th>
-                            <th>Predicted Score</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% if history %}
-                            {% for record in history %}
-                            <tr>
-                                <td>{{ record.study_hours }}h</td>
-                                <td>{{ record.attendance }}%</td>
-                                <td class="{% if record.predicted_score >= 80 %}score-high{% elif record.predicted_score >= 60 %}score-medium{% else %}score-low{% endif %}">
-                                    {{ record.predicted_score }}%
-                                </td>
-                                <td>
-                                    <a href="{{ url_for('delete_record', id=record._id|string) }}" class="delete-btn">
-                                        🗑️ Delete
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        {% else %}
-                            <tr>
-                                <td colspan="4" class="text-center opacity-6">No predictions yet. <a href="/" class="btn-link-light">Start predicting</a></td>
-                            </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
-            </div>
+            <p class="mb-0">View your full prediction history on the <a href="/history" class="btn-link-light">History</a> page.</p>
         </div>
     </div>
 </div>
