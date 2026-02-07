@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="glass-card p-5">
+            <h1 class="h3 mb-4 text-center">Student Predictor</h1>
+            <form action="/predict" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Daily Study Hours</label>
+                    <input class="form-control form-control-lg" type="number" name="study_hours" placeholder="Enter study hours per day (0-12)" min="0" max="12" step="0.5" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Attendance %</label>
+                    <input class="form-control form-control-lg" type="number" name="attendance" placeholder="Enter attendance % (0-100)" min="0" max="100" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Previous Score</label>
+                    <input class="form-control form-control-lg" type="number" name="prev_score" placeholder="Enter previous score (0-100)" min="0" max="100" required>
+                </div>
+                <div class="d-grid">
+                    <button class="btn btn-primary btn-lg" type="submit">🚀 Predict Result</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

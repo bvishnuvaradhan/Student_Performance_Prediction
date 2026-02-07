@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="glass-card p-5">
+            <h1 class="h3 mb-4 text-center">Sign Up</h1>
+            <form action="/signup" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input class="form-control form-control-lg" type="text" name="username" placeholder="Choose a username" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email (optional)</label>
+                    <input class="form-control form-control-lg" type="email" name="email" placeholder="you@example.com">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Password</label>
+                    <input class="form-control form-control-lg" type="password" name="password" placeholder="Choose a password" required>
+                </div>
+                <div class="d-grid">
+                    <button class="btn btn-primary btn-lg" type="submit">Create account</button>
+                </div>
+            </form>
+            <div class="text-center mt-3">
+                <small>Already have an account? <a href="/login" class="btn-link-light">Log in</a></small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

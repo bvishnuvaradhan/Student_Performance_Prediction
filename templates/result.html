@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="glass-card p-5 text-center">
+            <h2 class="h3 mb-4">AI Prediction Result</h2>
+            <div class="prediction-value">{{ score }}%</div>
+            <p class="mb-4 opacity-75">
+                Your performance has been successfully saved to MongoDB Cloud.
+            </p>
+            <div class="d-grid gap-2">
+                <a href="/" class="btn btn-primary btn-lg">
+                    ➕ New Prediction
+                </a>
+                <a href="/dashboard" class="btn btn-secondary btn-lg">
+                    📊 View Analytics
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

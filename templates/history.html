@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="glass-card p-5">
+            <h2 class="h3 mb-4">All Predictions History</h2>
+            <div id="chart-data" 
+                 data-labels='{{ labels|tojson }}' 
+                 data-scores='{{ scores|tojson }}' 
+                 class="chart-container mb-4">
+                <canvas id="historyChart"></canvas>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Daily Study Hrs</th>
+                            <th>Attendance %</th>
+                            <th>Previous Score</th>
+                            <th>Predicted Score</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if history %}
+                            {% for record in history %}
+                            <tr>
+                                <td>{{ record.get('user', '—') }}</td>
+                                <td>{{ record.study_hours }}h</td>
+                                <td>{{ record.attendance }}%</td>
+                                <td>{{ record.previous_score }}%</td>
+                                <td class="{% if record.predicted_score >= 80 %}score-high{% elif record.predicted_score >= 60 %}score-medium{% else %}score-low{% endif %}">
+                                    {{ record.predicted_score }}%
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('delete_record', id=record._id|string) }}" class="delete-btn">🗑️ Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center opacity-6">No predictions yet.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const dataEl = document.getElementById('chart-data');
+    const labels = dataEl ? JSON.parse(dataEl.getAttribute('data-labels')) : [];
+    const scores = dataEl ? JSON.parse(dataEl.getAttribute('data-scores')) : [];
+
+    if (labels.length > 0) {
+        new Chart(document.getElementById('historyChart'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'All Users Score Trend',
+                    data: scores,
+                    borderColor: '#00d2ff',
+                    backgroundColor: 'rgba(0, 210, 255, 0.08)',
+                    fill: true,
+                    tension: 0.35,
+                    borderWidth: 2,
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, max: 100, ticks: { color: '#dce9ff' } },
+                    x: { ticks: { color: '#dce9ff' } }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

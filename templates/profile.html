@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="glass-card p-5">
+            <h1 class="h3 mb-4">Profile</h1>
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.get('email', '—') }}</p>
+            <p><strong>Predictions made:</strong> {{ preds_count }}</p>
+
+            <hr>
+            <h4>Update Email</h4>
+            <form action="/profile" method="post" class="mb-4">
+                <input type="hidden" name="action" value="update_email">
+                <div class="mb-3">
+                    <label class="form-label" for="email">Email</label>
+                    <input id="email" class="form-control" type="email" name="email" value="{{ user.get('email','') }}" placeholder="you@example.com" title="Email address">
+                </div>
+                <button class="btn btn-primary" type="submit">Update Email</button>
+            </form>
+
+            <h4>Change Password</h4>
+            <form action="/profile" method="post" onsubmit="return confirm('Change password?');">
+                <input type="hidden" name="action" value="change_password">
+                <div class="mb-3">
+                    <label class="form-label" for="current_password">Current Password</label>
+                    <input id="current_password" class="form-control" type="password" name="current_password" placeholder="Enter current password" title="Current password" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="new_password">New Password</label>
+                    <input id="new_password" class="form-control" type="password" name="new_password" placeholder="Enter new password" title="New password" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="confirm_password">Confirm New Password</label>
+                    <input id="confirm_password" class="form-control" type="password" name="confirm_password" placeholder="Confirm new password" title="Confirm new password" required>
+                </div>
+                <button class="btn btn-warning" type="submit">Change Password</button>
+            </form>
+
+            <hr>
+            <h3 class="h5">Danger Zone</h3>
+            <p class="text-muted">Deleting your account will remove your profile and all your prediction history.</p>
+            <form action="/delete_user" method="post" onsubmit="return confirm('Delete your account and all predictions?');">
+                <button type="submit" class="btn btn-outline-danger">Delete My Account</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
