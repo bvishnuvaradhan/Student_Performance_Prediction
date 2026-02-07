@@ -58,6 +58,14 @@
     const scores = JSON.parse(dataElement.getAttribute('data-scores'));
 
     if (labels.length > 0) {
+        // compute point colors: green when increased vs previous, red when decreased, blue otherwise
+        const pointColors = scores.map((s, i) => {
+            if (i === 0) return '#00d2ff';
+            if (s > scores[i-1]) return '#27d27a'; // green
+            if (s < scores[i-1]) return '#ff6b5a'; // red
+            return '#00d2ff';
+        });
+
         new Chart(document.getElementById('myChart'), {
             type: 'line',
             data: {
@@ -65,14 +73,16 @@
                 datasets: [{ 
                     label: 'Score Trend', 
                     data: scores, 
-                    borderColor: '#00d2ff', 
-                    backgroundColor: 'rgba(0, 210, 255, 0.1)',
+                    // subtle steady line color
+                    borderColor: '#3a6ea5', 
+                    backgroundColor: 'rgba(58,110,165,0.08)',
                     fill: true,
                     tension: 0.4,
                     borderWidth: 3,
                     pointRadius: 5,
-                    pointBackgroundColor: '#00d2ff',
-                    pointBorderColor: '#0066ff',
+                    // color each point depending on increase/decrease
+                    pointBackgroundColor: pointColors,
+                    pointBorderColor: pointColors,
                     pointBorderWidth: 2
                 }]
             },
